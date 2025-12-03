@@ -991,10 +991,13 @@ window.addEventListener("DOMContentLoaded", () => {
         // Identify which product is selected
         const product = document.getElementById('productType').value;
         let productVal;
+        const isBlackPearl = (product === "BP2B1" || product === "BP2B2" || product === "BP2V2");
         if (product === "absen") {
           productVal = 11;  // vertical tile threshold for Absen
-        } else if (product === "BP2B1" || product === "BP2V2" || product === "theatrixx") {
-          productVal = 13;  // vertical tile threshold for Roe & Theatrixx
+        } else if (isBlackPearl) {
+          productVal = 11;  // vertical tile threshold for Black Pearl (changed from 13 to 11)
+        } else if (product === "theatrixx") {
+          productVal = 13;  // vertical tile threshold for Theatrixx
         } else {
           productVal = 12;  // fallback
         }
@@ -1027,9 +1030,12 @@ window.addEventListener("DOMContentLoaded", () => {
           const blocksVerDim = Math.ceil(heightFeet / tileHeightFeet);
 
           // Apply the same logic as in tile mode:
-          if ((product === "BP2B1" || product === "BP2B2" || product === "BP2V2" || product === "theatrixx") &&
-            blocksVerDim >= 9 && blocksVerDim <= 12 &&
-            !flownSupportCheckbox.checked) {
+          // Black Pearl specific logic: 9-10 tiles = pipe warning, 11-20 tiles = must fly
+          if (isBlackPearl && blocksVerDim >= 9 && blocksVerDim <= 10 && !flownSupportCheckbox.checked) {
+            dimensionWarningSpan.textContent = "Will need to add schedule 40 pipe and double swivel cheeseboughs";
+          } else if (isBlackPearl && blocksVerDim >= 11 && blocksVerDim <= 20 && !flownSupportCheckbox.checked) {
+            dimensionWarningSpan.textContent = "*** EXCEEDS LIMIT, MUST FLY***";
+          } else if (product === "theatrixx" && blocksVerDim >= 9 && blocksVerDim <= 12 && !flownSupportCheckbox.checked) {
             dimensionWarningSpan.textContent = "Will need to add schedule 40 pipe and double swivel cheeseboughs";
           } else if (blocksVerDim >= productVal && !flownSupportCheckbox.checked) {
             dimensionWarningSpan.textContent = "*** EXCEEDS LIMIT, MUST FLY***";
@@ -1050,10 +1056,13 @@ window.addEventListener("DOMContentLoaded", () => {
             return;
           }
 
-          // For Roe (BP2/BP2V2) and Theatrixx: if vertical tiles are 9..12 & flown support is not checked
-           if ((product === "BP2B1" || product === "BP2B2" || product === "BP2V2" || product === "theatrixx") &&
-            blocksVer >= 9 && blocksVer <= 12 &&
-            !flownSupportCheckbox.checked) {
+          // For Black Pearl: 9-10 tiles = pipe warning, 11-20 tiles = must fly
+          // For Theatrixx: 9-12 tiles = pipe warning, 13+ tiles = must fly
+          if (isBlackPearl && blocksVer >= 9 && blocksVer <= 10 && !flownSupportCheckbox.checked) {
+            blockWarningSpan.textContent = "Will need to add schedule 40 pipe and hardware.Check with LED team";
+          } else if (isBlackPearl && blocksVer >= 11 && blocksVer <= 20 && !flownSupportCheckbox.checked) {
+            blockWarningSpan.textContent = "*** EXCEEDS LIMIT, MUST FLY***";
+          } else if (product === "theatrixx" && blocksVer >= 9 && blocksVer <= 12 && !flownSupportCheckbox.checked) {
             blockWarningSpan.textContent = "Will need to add schedule 40 pipe and hardware.Check with LED team";
           } else if (blocksVer >= productVal && !flownSupportCheckbox.checked) {
             blockWarningSpan.textContent = "*** EXCEEDS LIMIT, MUST FLY***";
@@ -1066,6 +1075,25 @@ window.addEventListener("DOMContentLoaded", () => {
         }
       }
 
+      // Function to enforce Black Pearl max height of 20 tiles
+      function enforceBlackPearlHeightLimit() {
+        const product = document.getElementById('productType').value;
+        const blocksVerInput = document.getElementById('blocksVer');
+        const isBlackPearl = (product === "BP2B1" || product === "BP2B2" || product === "BP2V2");
+
+        if (blocksVerInput && isBlackPearl) {
+          blocksVerInput.setAttribute('max', '20');
+          // If current value exceeds 20, set it to 20
+          const currentValue = parseInt(blocksVerInput.value, 10);
+          if (!isNaN(currentValue) && currentValue > 20) {
+            blocksVerInput.value = 20;
+            updateWarning();
+          }
+        } else if (blocksVerInput) {
+          // Remove the max attribute for other products
+          blocksVerInput.removeAttribute('max');
+        }
+      }
 
       function restrictGroundSupportTypes(restrict) {
         const groundSupportType = document.getElementById('groundSupportType');
@@ -1972,6 +2000,7 @@ async function captureEntireScreen() {
           }
           restrictGroundSupportTypes(currentWallType && (currentWallType.value === 'Concave' || currentWallType.value === 'Convex'));
           restrictFlownSupportTypes(currentWallType && (currentWallType.value === 'Concave' || currentWallType.value === 'Convex'));
+          enforceBlackPearlHeightLimit();
           updateWall();
         });
 
@@ -2109,8 +2138,14 @@ function getDummyTileCount() {
           blocksHorInput.addEventListener('change', debouncedUpdateDimensionsFromBlocks);
         }
         if (blocksVerInput) {
-          blocksVerInput.addEventListener('input', debouncedUpdateDimensionsFromBlocks);
-          blocksVerInput.addEventListener('change', debouncedUpdateDimensionsFromBlocks);
+          blocksVerInput.addEventListener('input', function() {
+            enforceBlackPearlHeightLimit();
+            debouncedUpdateDimensionsFromBlocks();
+          });
+          blocksVerInput.addEventListener('change', function() {
+            enforceBlackPearlHeightLimit();
+            debouncedUpdateDimensionsFromBlocks();
+          });
         }
         if (toggleNumbersCheckbox) {
           showNumbers = toggleNumbersCheckbox.checked;
@@ -2125,6 +2160,7 @@ function getDummyTileCount() {
         handleWallTypeChange();
         toggleGroundSupportOptions();
         toggleFlownSupportOptions();
+        enforceBlackPearlHeightLimit();
         generateWall();
       });
 
