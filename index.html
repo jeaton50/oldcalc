@@ -985,6 +985,13 @@ window.addEventListener("DOMContentLoaded", () => {
         const blockWarningSpan = document.getElementById('blockVerticalWarning');
         const dimensionWarningSpan = document.getElementById('dimensionVerticalWarning');
 
+        // CRITICAL: If flown support is checked, always clear warnings and return
+        if (flownSupportCheckbox && flownSupportCheckbox.checked) {
+          if (blockWarningSpan) blockWarningSpan.textContent = "";
+          if (dimensionWarningSpan) dimensionWarningSpan.textContent = "";
+          return;
+        }
+
         // Check if the user is entering dimensions or tile counts
         const isDimensionInput = document.getElementById('dimensionInput').checked;
 
