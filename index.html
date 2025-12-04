@@ -1098,8 +1098,8 @@ window.addEventListener("DOMContentLoaded", () => {
 
         if (!blocksVerInput) return;
 
-        // Black Pearl and Theatrixx: always max 11 tiles
-        if (isBlackPearl || isTheatrixx) {
+        // All products (Absen, Black Pearl, Theatrixx): max 11 tiles when ground support is selected
+        if ((isAbsen || isBlackPearl || isTheatrixx) && !flownSupportChecked) {
           blocksVerInput.setAttribute('max', '11');
           const currentValue = parseInt(blocksVerInput.value, 10);
           if (!isNaN(currentValue) && currentValue > 11) {
@@ -1107,16 +1107,7 @@ window.addEventListener("DOMContentLoaded", () => {
             updateWarning();
           }
         }
-        // Absen: max 11 tiles only when ground support is selected
-        else if (isAbsen && !flownSupportChecked) {
-          blocksVerInput.setAttribute('max', '11');
-          const currentValue = parseInt(blocksVerInput.value, 10);
-          if (!isNaN(currentValue) && currentValue > 11) {
-            blocksVerInput.value = 11;
-            updateWarning();
-          }
-        }
-        // Absen with flown support or other products: remove max limit
+        // All products with flown support or other products: remove max limit
         else {
           blocksVerInput.removeAttribute('max');
         }
