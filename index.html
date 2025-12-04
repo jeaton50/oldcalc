@@ -1095,14 +1095,22 @@ window.addEventListener("DOMContentLoaded", () => {
         const isTheatrixx = (product === "theatrixx");
         const isAbsen = (product === "absen");
         const flownSupportChecked = document.getElementById('flownSupport') && document.getElementById('flownSupport').checked;
+        const wallTypeElement = document.querySelector('input[name="wallType"]:checked');
+        const wallType = wallTypeElement ? wallTypeElement.value : 'Flat';
 
         if (!blocksVerInput) return;
 
         const currentValue = parseInt(blocksVerInput.value, 10);
 
-        // All products (Absen, Black Pearl, Theatrixx): max 11 tiles when ground support is selected
-        if ((isAbsen || isBlackPearl || isTheatrixx) && !flownSupportChecked) {
-          // Don't use max attribute - handle validation in JavaScript only
+        // Black Pearl and Theatrixx: max 8 tiles when Concave or Convex wall type is selected
+        if ((isBlackPearl || isTheatrixx) && (wallType === 'Concave' || wallType === 'Convex')) {
+          if (!isNaN(currentValue) && currentValue > 8) {
+            blocksVerInput.value = 8;
+            updateWarning();
+          }
+        }
+        // All products (Absen, Black Pearl, Theatrixx): max 11 tiles when ground support is selected with Flat walls
+        else if ((isAbsen || isBlackPearl || isTheatrixx) && !flownSupportChecked) {
           if (!isNaN(currentValue) && currentValue > 11) {
             blocksVerInput.value = 11;
             updateWarning();
@@ -2027,6 +2035,7 @@ async function captureEntireScreen() {
         wallTypeRadios.forEach(radio => {
           radio.addEventListener('change', () => {
             handleWallTypeChange();
+            enforceBlackPearlHeightLimit(); // Update height limits when wall type changes
             generateWall();
 
             // Check if the product is Absen and the wall type is not Flat
