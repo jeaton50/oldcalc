@@ -1038,14 +1038,14 @@ window.addEventListener("DOMContentLoaded", () => {
           const blocksVerDim = Math.ceil(heightFeet / tileHeightFeet);
 
           // Apply the same logic as in tile mode:
-          // Black Pearl specific logic: 9-10 tiles = pipe warning, 11-20 tiles = must fly
+          // Black Pearl specific logic: 9-10 tiles = pipe warning, 11 tiles = must fly (max)
           if (isBlackPearl && blocksVerDim >= 9 && blocksVerDim <= 10 && !flownSupportCheckbox.checked) {
             dimensionWarningSpan.textContent = "Will need to add schedule 40 pipe and double swivel cheeseboughs";
-          } else if (isBlackPearl && blocksVerDim >= 11 && blocksVerDim <= 20 && !flownSupportCheckbox.checked) {
+          } else if (isBlackPearl && blocksVerDim >= 11 && !flownSupportCheckbox.checked) {
             dimensionWarningSpan.textContent = "*** EXCEEDS LIMIT, MUST FLY***";
           } else if (isTheatrixx && blocksVerDim >= 9 && blocksVerDim <= 10 && !flownSupportCheckbox.checked) {
             dimensionWarningSpan.textContent = "Will need to add schedule 40 pipe and double swivel cheeseboughs";
-          } else if (isTheatrixx && blocksVerDim >= 11 && blocksVerDim <= 20 && !flownSupportCheckbox.checked) {
+          } else if (isTheatrixx && blocksVerDim >= 11 && !flownSupportCheckbox.checked) {
             dimensionWarningSpan.textContent = "*** EXCEEDS LIMIT, MUST FLY***";
           } else if (blocksVerDim >= productVal && !flownSupportCheckbox.checked) {
             dimensionWarningSpan.textContent = "*** EXCEEDS LIMIT, MUST FLY***";
@@ -1066,15 +1066,15 @@ window.addEventListener("DOMContentLoaded", () => {
             return;
           }
 
-          // For Black Pearl: 9-10 tiles = pipe warning, 11-20 tiles = must fly
-          // For Theatrixx: 9-10 tiles = pipe warning, 11-20 tiles = must fly
+          // For Black Pearl: 9-10 tiles = pipe warning, 11 tiles = must fly (max)
+          // For Theatrixx: 9-10 tiles = pipe warning, 11 tiles = must fly (max)
           if (isBlackPearl && blocksVer >= 9 && blocksVer <= 10 && !flownSupportCheckbox.checked) {
             blockWarningSpan.textContent = "Will need to add schedule 40 pipe and hardware.Check with LED team";
-          } else if (isBlackPearl && blocksVer >= 11 && blocksVer <= 20 && !flownSupportCheckbox.checked) {
+          } else if (isBlackPearl && blocksVer >= 11 && !flownSupportCheckbox.checked) {
             blockWarningSpan.textContent = "*** EXCEEDS LIMIT, MUST FLY***";
           } else if (isTheatrixx && blocksVer >= 9 && blocksVer <= 10 && !flownSupportCheckbox.checked) {
             blockWarningSpan.textContent = "Will need to add schedule 40 pipe and hardware.Check with LED team";
-          } else if (isTheatrixx && blocksVer >= 11 && blocksVer <= 20 && !flownSupportCheckbox.checked) {
+          } else if (isTheatrixx && blocksVer >= 11 && !flownSupportCheckbox.checked) {
             blockWarningSpan.textContent = "*** EXCEEDS LIMIT, MUST FLY***";
           } else if (blocksVer >= productVal && !flownSupportCheckbox.checked) {
             blockWarningSpan.textContent = "*** EXCEEDS LIMIT, MUST FLY***";
@@ -1087,7 +1087,7 @@ window.addEventListener("DOMContentLoaded", () => {
         }
       }
 
-      // Function to enforce Black Pearl and Theatrixx max height of 20 tiles
+      // Function to enforce Black Pearl and Theatrixx max height of 11 tiles
       function enforceBlackPearlHeightLimit() {
         const product = document.getElementById('productType').value;
         const blocksVerInput = document.getElementById('blocksVer');
@@ -1095,11 +1095,11 @@ window.addEventListener("DOMContentLoaded", () => {
         const isTheatrixx = (product === "theatrixx");
 
         if (blocksVerInput && (isBlackPearl || isTheatrixx)) {
-          blocksVerInput.setAttribute('max', '20');
-          // If current value exceeds 20, set it to 20
+          blocksVerInput.setAttribute('max', '11');
+          // If current value exceeds 11, set it to 11
           const currentValue = parseInt(blocksVerInput.value, 10);
-          if (!isNaN(currentValue) && currentValue > 20) {
-            blocksVerInput.value = 20;
+          if (!isNaN(currentValue) && currentValue > 11) {
+            blocksVerInput.value = 11;
             updateWarning();
           }
         } else if (blocksVerInput) {
