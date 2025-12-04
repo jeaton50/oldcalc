@@ -1087,23 +1087,37 @@ window.addEventListener("DOMContentLoaded", () => {
         }
       }
 
-      // Function to enforce Black Pearl and Theatrixx max height of 11 tiles
+      // Function to enforce height limits based on product type and support type
       function enforceBlackPearlHeightLimit() {
         const product = document.getElementById('productType').value;
         const blocksVerInput = document.getElementById('blocksVer');
         const isBlackPearl = (product === "BP2B1" || product === "BP2B2" || product === "BP2V2");
         const isTheatrixx = (product === "theatrixx");
+        const isAbsen = (product === "absen");
+        const flownSupportChecked = document.getElementById('flownSupport') && document.getElementById('flownSupport').checked;
 
-        if (blocksVerInput && (isBlackPearl || isTheatrixx)) {
+        if (!blocksVerInput) return;
+
+        // Black Pearl and Theatrixx: always max 11 tiles
+        if (isBlackPearl || isTheatrixx) {
           blocksVerInput.setAttribute('max', '11');
-          // If current value exceeds 11, set it to 11
           const currentValue = parseInt(blocksVerInput.value, 10);
           if (!isNaN(currentValue) && currentValue > 11) {
             blocksVerInput.value = 11;
             updateWarning();
           }
-        } else if (blocksVerInput) {
-          // Remove the max attribute for other products
+        }
+        // Absen: max 11 tiles only when ground support is selected
+        else if (isAbsen && !flownSupportChecked) {
+          blocksVerInput.setAttribute('max', '11');
+          const currentValue = parseInt(blocksVerInput.value, 10);
+          if (!isNaN(currentValue) && currentValue > 11) {
+            blocksVerInput.value = 11;
+            updateWarning();
+          }
+        }
+        // Absen with flown support or other products: remove max limit
+        else {
           blocksVerInput.removeAttribute('max');
         }
       }
@@ -1200,6 +1214,7 @@ window.addEventListener("DOMContentLoaded", () => {
         } else {
           groundSupportOptions.style.display = 'none';
         }
+        enforceBlackPearlHeightLimit(); // Update height limits when support type changes
         updateWall();
       }
 
@@ -1219,6 +1234,7 @@ window.addEventListener("DOMContentLoaded", () => {
             warningDiv.style.display = 'none';
           }
         }
+        enforceBlackPearlHeightLimit(); // Update height limits when support type changes
         updateWall();
       }
 
