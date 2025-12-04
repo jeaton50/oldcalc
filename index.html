@@ -2349,7 +2349,8 @@ if (document.getElementById('dummyTilesCheckbox').checked) {
         //_8PPL25 = Math.floor(data.totalBlocksWithSpares / 8);
         _8PPL25 = Math.ceil(data.totalBlocksWithSpares / 8);
 
-        if (B61 === "***EXCEEDS LIMIT, MUST FLY***") {
+        // Only show warning and hide equipment if exceeds limit AND flown support is NOT selected
+        if (B61 === "***EXCEEDS LIMIT, MUST FLY***" && !data.flownSupport) {
           addEquipmentRow('', '***EXCEEDS LIMIT, MUST FLY***', 0, 1, tbody);
           return;
         }
