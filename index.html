@@ -1098,26 +1098,17 @@ window.addEventListener("DOMContentLoaded", () => {
 
         if (!blocksVerInput) return;
 
+        const currentValue = parseInt(blocksVerInput.value, 10);
+
         // All products (Absen, Black Pearl, Theatrixx): max 11 tiles when ground support is selected
         if ((isAbsen || isBlackPearl || isTheatrixx) && !flownSupportChecked) {
-          blocksVerInput.setAttribute('max', '11');
-          const currentValue = parseInt(blocksVerInput.value, 10);
+          // Don't use max attribute - handle validation in JavaScript only
           if (!isNaN(currentValue) && currentValue > 11) {
             blocksVerInput.value = 11;
             updateWarning();
           }
         }
-        // All products with flown support: set high max to allow up arrow to work immediately
-        else if ((isAbsen || isBlackPearl || isTheatrixx) && flownSupportChecked) {
-          blocksVerInput.setAttribute('max', '999');
-          // Force the browser to recognize the new max by triggering validation
-          const currentValue = blocksVerInput.value;
-          blocksVerInput.value = currentValue;
-        }
-        // Other products: remove max limit
-        else {
-          blocksVerInput.removeAttribute('max');
-        }
+        // All products with flown support or other products: no validation needed
       }
 
       function restrictGroundSupportTypes(restrict) {
