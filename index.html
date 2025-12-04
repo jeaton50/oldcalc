@@ -2416,7 +2416,7 @@ if (document.getElementById('dummyTilesCheckbox').checked) {
         //let X15 = E20 === "Flat" ? Q15 : S11;
         //PL25BEAMAD = B61 === "***EXCEEDS LIMIT, MUST FLY***" ? 0 : (E19 === "Ground" ? X15 : "0");
         // Keep this flat only for now.
-        PL25BEAMAD = B61 === "***EXCEEDS LIMIT, MUST FLY***" ? 0 : (E19 === "Ground" ? Q15 : "0");
+        PL25BEAMAD = (B61 === "***EXCEEDS LIMIT, MUST FLY***" && !data.flownSupport) ? 0 : (E19 === "Ground" ? Q15 : "0");
 
 
         if (data.groundSupport) {
@@ -2436,7 +2436,7 @@ if (document.getElementById('dummyTilesCheckbox').checked) {
           }
           let U17 = Math.ceil(D11 - (PL25BB2 * 2));
           let H43 = (E20 === "Flat" && E19 === "Ground") ? U17 : (E20 === "Convex" || E20 === "Concave") ? G11 : U17;
-          TXBASE1W = BPBOBB1 = PL25BB1 = (B61 === "***EXCEEDS LIMIT, MUST FLY***") ? 0 : U17;
+          TXBASE1W = BPBOBB1 = PL25BB1 = (B61 === "***EXCEEDS LIMIT, MUST FLY***" && !data.flownSupport) ? 0 : U17;
 
           // Compute the universal base truss count (BPBOBT) as a function of horizontal blocks:
           BPBOBT = Math.ceil(data.blocksHor / 1.9);
@@ -2466,7 +2466,7 @@ if (document.getElementById('dummyTilesCheckbox').checked) {
         A9 = Math.floor(G11 / 2) * PL25OUT;
         PL25CLAMP = (E19 === "Ground") ? A9 : 0;
         let H47 = (E19 === "Ground") ? A9 : 0;
-        PL25LAD1M = (B61 === "***EXCEEDS LIMIT, MUST FLY***") ? 0 : H47;
+        PL25LAD1M = (B61 === "***EXCEEDS LIMIT, MUST FLY***" && !data.flownSupport) ? 0 : H47;
 
         // Flown
         if (data.flownSupport) {
@@ -2670,7 +2670,7 @@ if (document.getElementById('dummyTilesCheckbox').checked) {
             let O54 = Math.ceil(O13 / 2);
             let N54 = (B6 > 0.01 ? O54 : 0);
             let P54 = E20 == "Flat" ? N54 : 0;
-            PL25PLAT = B61 === "***EXCEEDS LIMIT, MUST FLY***" ? 0 : (E19 === "Ground" ? P54 : "0");
+            PL25PLAT = (B61 === "***EXCEEDS LIMIT, MUST FLY***" && !data.flownSupport) ? 0 : (E19 === "Ground" ? P54 : "0");
 
             addEquipmentRow('8PPL25', 'Absen PL2.5 8x tile package', 0, _8PPL25, tbody);
             addEquipmentRow('PL25', 'Absen PL2.5 tile', 20.61, B5, tbody);
@@ -2950,19 +2950,19 @@ if (document.getElementById('dummyTilesCheckbox').checked) {
             }
 
             // The ski frame and stacking extension are the same.
-            let H45 = (B61 === "***EXCEEDS LIMIT, MUST FLY***") ? 0 : (O3 >= 0.01 ? O3 : "0");
+            let H45 = (B61 === "***EXCEEDS LIMIT, MUST FLY***" && !data.flownSupport) ? 0 : (O3 >= 0.01 ? O3 : "0");
             // Calculate a value based on blocksVer for ground support equipment
             let N48 = Math.ceil(data.blocksVer / 2) * O3;
-            let H47 = (B61 === "***EXCEEDS LIMIT, MUST FLY***") ? 0 : (E19 === "Ground" ? N48 : "0");
+            let H47 = (B61 === "***EXCEEDS LIMIT, MUST FLY***" && !data.flownSupport) ? 0 : (E19 === "Ground" ? N48 : "0");
             let N45 = (E20 === "Flat") ? N48 : 0;
-            let H48 = (B61 === "***EXCEEDS LIMIT, MUST FLY***") ? 0 : N45;
+            let H48 = (B61 === "***EXCEEDS LIMIT, MUST FLY***" && !data.flownSupport) ? 0 : N45;
             let H49 = TXBASE2W + TXBASE1W;
             // Single Foot
             let M12 = 2;  // 1x2
-            let H50 = (B61 === "***EXCEEDS LIMIT, MUST FLY***") ? 0 : (E19 === "Ground" ? M12 : "0");
+            let H50 = (B61 === "***EXCEEDS LIMIT, MUST FLY***" && !data.flownSupport) ? 0 : (E19 === "Ground" ? M12 : "0");
             // Curved Bracket
             let N42 = (E20 === "Concave" || E20 === "Convex") ? N48 : (E20 === "Flat" ? 0 : 0);
-            let H51 = (B61 === "***EXCEEDS LIMIT, MUST FLY***") ? 0 : N42;
+            let H51 = (B61 === "***EXCEEDS LIMIT, MUST FLY***" && !data.flownSupport) ? 0 : N42;
             let H52 = H47 * 2;
 
             //H34 =  IF(E23="None",'Processing & Scaling'::Table 1::B35,IF(E23="Fully Redundant",'Processing & Scaling'::Table 1::B38,0))
