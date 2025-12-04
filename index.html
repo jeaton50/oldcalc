@@ -1110,6 +1110,9 @@ window.addEventListener("DOMContentLoaded", () => {
         // All products with flown support: set high max to allow up arrow to work immediately
         else if ((isAbsen || isBlackPearl || isTheatrixx) && flownSupportChecked) {
           blocksVerInput.setAttribute('max', '999');
+          // Force the browser to recognize the new max by triggering validation
+          const currentValue = blocksVerInput.value;
+          blocksVerInput.value = currentValue;
         }
         // Other products: remove max limit
         else {
