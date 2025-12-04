@@ -1107,7 +1107,11 @@ window.addEventListener("DOMContentLoaded", () => {
             updateWarning();
           }
         }
-        // All products with flown support or other products: remove max limit
+        // All products with flown support: set high max to allow up arrow to work immediately
+        else if ((isAbsen || isBlackPearl || isTheatrixx) && flownSupportChecked) {
+          blocksVerInput.setAttribute('max', '999');
+        }
+        // Other products: remove max limit
         else {
           blocksVerInput.removeAttribute('max');
         }
