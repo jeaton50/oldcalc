@@ -2395,7 +2395,7 @@ if (document.getElementById('dummyTilesCheckbox').checked) {
 
         let B32 = Math.ceil(B29 / 4096) * Math.ceil(B28 / 2160);
         let divisionResultB14 = B5 / B13;
-        let B14 = isFinite(divisionResultB14) ? Math.ceil(divisionResultB14) : "0";
+        let B14 = isFinite(divisionResultB14) ? Math.ceil(divisionResultB14) : 0;
         let B15 = Math.max(Math.ceil(B5 / B27), Math.ceil(B14 / 40), B32);
         let B16 = (B13 !== 0) ? Math.max(B15, Math.ceil(B5 / (10 * B13))) : 0;
         let B19 = Math.max(B15, Math.ceil(B14 / 20));
